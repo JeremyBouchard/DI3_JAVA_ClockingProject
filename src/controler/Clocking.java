@@ -15,6 +15,8 @@ public class Clocking {
 		System.out.println(Employee1.getDepartureTime());*/
 
 		GUI gui1=new GUI();
-		System.out.println("12");
+		gui1.pack();
+		gui1.setVisible(true);
+		System.out.println("end");
 	}
 }

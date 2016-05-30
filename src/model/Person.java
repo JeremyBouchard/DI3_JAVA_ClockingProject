@@ -6,8 +6,7 @@ public abstract class Person {
 	
 	public enum gender{
 		Male,
-		Female,
-		Other;
+		Female;
 	}
 	
 	//Attributes
