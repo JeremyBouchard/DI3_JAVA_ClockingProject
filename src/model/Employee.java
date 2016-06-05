@@ -49,7 +49,7 @@ public class Employee extends Person {
 	}*/
 	public Employee(String firstname, String surname, gender gender, 
 			String mailAddress, LocalDate birthdate, Department department, 
-			LocalTime arrivalTime,LocalTime departureTime, int cardNumber){
+			LocalTime arrivalTime,LocalTime departureTime, int cardNumber ){
 		setFirstname(firstname);
 		setSurname(surname);
 		setGender(gender);
