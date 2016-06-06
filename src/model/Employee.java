@@ -48,8 +48,8 @@ public class Employee extends Person {
 		setId();
 	}*/
 	public Employee(String firstname, String surname, gender gender, 
-			String mailAddress, LocalDate birthdate, Department department, 
-			LocalTime arrivalTime,LocalTime departureTime, int cardNumber ){
+		String mailAddress, LocalDate birthdate, Department department, 
+		LocalTime arrivalTime,LocalTime departureTime, int cardNumber ){
 		setFirstname(firstname);
 		setSurname(surname);
 		setGender(gender);
@@ -61,14 +61,15 @@ public class Employee extends Person {
 		this.cardNumber=cardNumber;
 		setId();
 	}
-	
-	
-	
 
 	//Methods
 	public final void setId(){
 		id= instanceCount;
 		instanceCount++;
+	}
+	
+	public String toString(){
+		return getFirstname()+" "+getSurname()+" "+getId();
 	}
 
 	public int getId() {

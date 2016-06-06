@@ -5,11 +5,18 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.util.Iterator;
+
 import javax.swing.JList;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import javax.swing.JTextField;
+
+import model.Company;
+import model.Employee;
+
 import javax.swing.JComboBox;
 
 public class PanelEmployeeUpdate extends JPanel {
@@ -17,37 +24,44 @@ public class PanelEmployeeUpdate extends JPanel {
 	private JTextField textSurname;
 	private JTextField textMail;
 	private JTextField textBirthdate;
+	private JList employeeList;
+	private JComboBox comboGender;
+	private JComboBox comboDepartment;
+	
+	private static DefaultListModel listModel= new DefaultListModel();
+	private JLabel lblInfoList;
+	
 	public PanelEmployeeUpdate() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] {0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[] {0, 0, 0, 30, 30, 30, 30, 30, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		JLabel lblSelectEmployeeTo = new JLabel("Select employee");
-		GridBagConstraints gbc_lblSelectEmployeeTo = new GridBagConstraints();
-		gbc_lblSelectEmployeeTo.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSelectEmployeeTo.gridx = 0;
-		gbc_lblSelectEmployeeTo.gridy = 0;
-		add(lblSelectEmployeeTo, gbc_lblSelectEmployeeTo);
+		lblInfoList = new JLabel("Select employee");
+		GridBagConstraints gbc_lblInfoList = new GridBagConstraints();
+		gbc_lblInfoList.insets = new Insets(0, 0, 5, 5);
+		gbc_lblInfoList.gridx = 0;
+		gbc_lblInfoList.gridy = 0;
+		add(lblInfoList, gbc_lblInfoList);
 		
-		JLabel lblUpdateInfos = new JLabel("Update infos");
-		GridBagConstraints gbc_lblUpdateInfos = new GridBagConstraints();
-		gbc_lblUpdateInfos.gridwidth = 2;
-		gbc_lblUpdateInfos.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUpdateInfos.gridx = 1;
-		gbc_lblUpdateInfos.gridy = 0;
-		add(lblUpdateInfos, gbc_lblUpdateInfos);
+		JLabel lblInfoUpdate = new JLabel("Update infos");
+		GridBagConstraints gbc_lblInfoUpdate = new GridBagConstraints();
+		gbc_lblInfoUpdate.gridwidth = 2;
+		gbc_lblInfoUpdate.insets = new Insets(0, 0, 5, 5);
+		gbc_lblInfoUpdate.gridx = 1;
+		gbc_lblInfoUpdate.gridy = 0;
+		add(lblInfoUpdate, gbc_lblInfoUpdate);
 		
-		JList listEmployee = new JList();
-		GridBagConstraints gbc_listEmployee = new GridBagConstraints();
-		gbc_listEmployee.gridheight = 6;
-		gbc_listEmployee.insets = new Insets(0, 0, 5, 5);
-		gbc_listEmployee.fill = GridBagConstraints.BOTH;
-		gbc_listEmployee.gridx = 0;
-		gbc_listEmployee.gridy = 1;
-		add(listEmployee, gbc_listEmployee);
+		employeeList = new JList(listModel);
+		GridBagConstraints gbc_employeeList = new GridBagConstraints();
+		gbc_employeeList.gridheight = 6;
+		gbc_employeeList.insets = new Insets(0, 0, 5, 5);
+		gbc_employeeList.fill = GridBagConstraints.BOTH;
+		gbc_employeeList.gridx = 0;
+		gbc_employeeList.gridy = 1;
+		add(employeeList, gbc_employeeList);
 		
 		JLabel lblGender = new JLabel("Gender :");
 		GridBagConstraints gbc_lblGender = new GridBagConstraints();
@@ -57,7 +71,7 @@ public class PanelEmployeeUpdate extends JPanel {
 		gbc_lblGender.gridy = 1;
 		add(lblGender, gbc_lblGender);
 		
-		JComboBox comboGender = new JComboBox();
+		comboGender = new JComboBox();
 		comboGender.setMaximumRowCount(3);
 		GridBagConstraints gbc_comboGender = new GridBagConstraints();
 		gbc_comboGender.insets = new Insets(0, 0, 5, 0);
@@ -143,7 +157,7 @@ public class PanelEmployeeUpdate extends JPanel {
 		gbc_label_5.gridy = 6;
 		add(label_5, gbc_label_5);
 		
-		JComboBox comboDepartment = new JComboBox();
+		comboDepartment = new JComboBox();
 		GridBagConstraints gbc_comboDepartment = new GridBagConstraints();
 		gbc_comboDepartment.insets = new Insets(0, 0, 5, 0);
 		gbc_comboDepartment.fill = GridBagConstraints.HORIZONTAL;
@@ -156,6 +170,51 @@ public class PanelEmployeeUpdate extends JPanel {
 		gbc_btnSubmit.gridx = 2;
 		gbc_btnSubmit.gridy = 7;
 		add(btnSubmit, gbc_btnSubmit);
+	}
+	
+	public static void updateEmployeeList() {
+		Company company=Company.getInstance();
+		Iterator<Employee> iterator= company.getEmployeeList().iterator();
+		listModel.clear();
+		while (iterator.hasNext()){
+			listModel.addElement(iterator.next());
+		}
+	}
+	
+	public JTextField getTextFirstname() {
+		return textFirstname;
+	}
+
+	public JTextField getTextSurname() {
+		return textSurname;
+	}
+
+	public JTextField getTextMail() {
+		return textMail;
+	}
+
+	public JTextField getTextBirthdate() {
+		return textBirthdate;
+	}
+
+	public JList getEmployeeList() {
+		return employeeList;
+	}
+
+	public JComboBox getComboGender() {
+		return comboGender;
+	}
+
+	public JComboBox getComboDepartment() {
+		return comboDepartment;
+	}
+
+	public static DefaultListModel getListModel() {
+		return listModel;
+	}
+
+	public JLabel getLblInfoList() {
+		return lblInfoList;
 	}
 
 }

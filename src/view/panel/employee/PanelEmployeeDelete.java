@@ -10,13 +10,23 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
+import java.util.*;
+import employee.ActionEmployeeDelete;
+import model.Company;
+import model.Employee;
+
 import java.awt.Color;
 import javax.swing.border.EtchedBorder;
 
 public class PanelEmployeeDelete extends JPanel {
+	private JList employeeList;
+	private static DefaultListModel listModel= new DefaultListModel();
+	
 	public PanelEmployeeDelete() {
 		setBorder(null);
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -33,36 +43,40 @@ public class PanelEmployeeDelete extends JPanel {
 		gbc_lblInstruction.gridy = 0;
 		add(lblInstruction, gbc_lblInstruction);
 		
-		JButton btnNewButton = new JButton("Submit");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Submited");
-			}
-		});
+		JButton btnNSubmit = new JButton("Submit");
+		btnNSubmit.addActionListener(new ActionEmployeeDelete());
+		GridBagConstraints gbc_btnNSubmit = new GridBagConstraints();
+		gbc_btnNSubmit.anchor = GridBagConstraints.EAST;
+		gbc_btnNSubmit.gridx = 0;
+		gbc_btnNSubmit.gridy = 2;
+		add(btnNSubmit, gbc_btnNSubmit);
+			
+		employeeList = new JList(listModel);
+		employeeList.setVisibleRowCount(5);
+		employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		GridBagConstraints gbc_employyeList = new GridBagConstraints();
+		gbc_employyeList.fill = GridBagConstraints.BOTH;
+		gbc_employyeList.insets = new Insets(5, 15, 5, 15);
+		gbc_employyeList.gridx = 0;
+		gbc_employyeList.gridy = 1;
+		add(employeeList, gbc_employyeList);
 		
-		JList list = new JList();
-		list.setVisibleRowCount(5);
-		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		GridBagConstraints gbc_list = new GridBagConstraints();
-		gbc_list.fill = GridBagConstraints.BOTH;
-		gbc_list.insets = new Insets(5, 15, 5, 15);
-		gbc_list.gridx = 0;
-		gbc_list.gridy = 1;
-		add(list, gbc_list);
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.anchor = GridBagConstraints.EAST;
-		gbc_btnNewButton.gridx = 0;
-		gbc_btnNewButton.gridy = 2;
-		add(btnNewButton, gbc_btnNewButton);
+	}
+	
+	public static void updateEmployeeList(){
+		Company company=Company.getInstance();
+		Iterator<Employee> iterator= company.getEmployeeList().iterator();
+		listModel.clear();
+		while (iterator.hasNext()){
+			listModel.addElement(iterator.next());
+		}
+	}
+
+	public JList getEmployeeList() {
+		return employeeList;
+	}
+	public DefaultListModel getListModel() {
+		return listModel;
 	}
 
 }

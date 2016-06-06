@@ -7,13 +7,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import view.GUI;
+import view.panel.employee.PanelEmployeeDelete;
+import view.panel.employee.PanelEmployeeUpdate;
 
 
 public class MenuEmployee extends JMenu {
 
 	
 	public MenuEmployee() {
-		setText("Employee");
+		setText("Staff management");
 		
 		JMenuItem menuItemAdd = new JMenuItem("add");
 		menuItemAdd.addActionListener(new ActionListener() {
@@ -27,6 +29,7 @@ public class MenuEmployee extends JMenu {
 		menuItemDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				GUI.show(GUI.EMPLOYEEDELETEPANEL);
+				PanelEmployeeDelete.updateEmployeeList();
 			}
 		});
 		add(menuItemDelete);
@@ -35,6 +38,7 @@ public class MenuEmployee extends JMenu {
 		menuItemUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				GUI.show(GUI.EMPLOYEEUPDATEPANEL);
+				PanelEmployeeUpdate.updateEmployeeList();
 			}
 		});
 		add(menuItemUpdate);

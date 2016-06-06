@@ -3,62 +3,84 @@ package model;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import view.panel.employee.PanelEmployeeDelete;
 
-public class Company {
 
+public class Company {//Singleton patern
+
+	private static Company instance = new Company();
+	
 	//Atributes
 	private String name;
-	private HashSet<Person> personList;
-	private HashSet<VirtualDepartment> virtualDepartmentList;
-	private Boss boss;
+	private HashSet<Employee> EmployeeList = new HashSet<Employee>();
+	private HashSet<Manager> ManagerList = new HashSet<Manager>();
+	private HashSet<Department> departmentList = new HashSet<Department>();
+	private Boss boss = new Boss();
 
 	//Constructors
-	public Company(){}
-	public Company(String name, Boss boss){
-		this.name=name;
-		this.boss=boss;
-	}
-
-	public Company(String name, HashSet<Person> personList, HashSet<VirtualDepartment> virtualDepartmentList, Boss boss){
-		this.name=name;
-		this.boss=boss;
-		this.personList=personList;
-		this.virtualDepartmentList=virtualDepartmentList;
-	}
-
-	public Company(String name, Person[] arrayPersonList, VirtualDepartment[] arrayVirtualDepartmentList, Boss boss ){
-		this.name=name;
-		this.boss=boss;
-		
-		HashSet<Person> personList = new HashSet<Person>(Arrays.asList(arrayPersonList));
-		this.personList=personList;
-
-		HashSet<VirtualDepartment> virtualDepartmentList = new HashSet<VirtualDepartment>(Arrays.asList(arrayVirtualDepartmentList));
-		this.virtualDepartmentList=virtualDepartmentList;
-	}
+	private Company(){}
 
 	//Methods
+	public static Company getInstance(){
+		return instance;
+	}
+	
+	public void addEmployee(Employee employee){
+		EmployeeList.add(employee);
+		Department department= employee.getDepartment();
+		department.addEmployee(employee);
+	}
+	
+	public void removeEmployee (Employee employee){
+		EmployeeList.remove(employee);
+		Department department= employee.getDepartment();
+		department.removeEmployee(employee);
+	}
+	
+	public void addManager(Manager manager){
+		ManagerDepartment.getInstance().addManager(manager);
+		Department department= manager.getDepartment();
+		department.setManager(manager);
+	}
+	
+	public void addDepartment (Department department){
+		departmentList.add(department);
+	}
+
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public HashSet<Person> getPersonList() {
-		return personList;
+	public HashSet<Employee> getEmployeeList() {
+		return EmployeeList;
 	}
-	public void setPersonList(HashSet<Person> personList) {
-		this.personList = personList;
+
+	public void setEmployeeList(HashSet<Employee> employeeList) {
+		EmployeeList = employeeList;
 	}
-	public HashSet<VirtualDepartment> getVirtualDepartmentList() {
-		return virtualDepartmentList;
+
+	public HashSet<Manager> getManagerList() {
+		return ManagerList;
 	}
-	public void setVirtualDepartmentList(HashSet<VirtualDepartment> virtualDepartmentList) {
-		this.virtualDepartmentList = virtualDepartmentList;
+	
+	public void setManagerList(HashSet<Manager> managerList) {
+		ManagerList = managerList;
 	}
+	
+	public HashSet<Department> getDepartmentList() {
+		return departmentList;
+	}
+	
+	public void setDepartmentList(HashSet<Department> virtualDepartmentList) {
+		this.departmentList = virtualDepartmentList;
+	}
+	
 	public Boss getBoss() {
 		return boss;
 	}
+	
 	public void setBoss(Boss boss) {
 		this.boss = boss;
 	}

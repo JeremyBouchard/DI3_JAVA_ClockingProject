@@ -10,7 +10,7 @@ import view.GUI;
 
 public class MenuDepartment extends JMenu {
 	public MenuDepartment(){
-		setText("Department");
+		setText("Department management");
 		
 		JMenuItem menuItemAdd = new JMenuItem("Add");
 		menuItemAdd.addActionListener(new ActionListener() {

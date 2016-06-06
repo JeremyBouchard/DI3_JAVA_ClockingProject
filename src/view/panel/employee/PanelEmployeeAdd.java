@@ -15,9 +15,17 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import employee.EmployeeAddAction;
+import model.Company;
+import model.Department;
+import model.Person;
 import model.Person.gender;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JCheckBox;
 
 public class PanelEmployeeAdd extends JPanel {
+
+	private static final boolean debug = true;
 	
 	final public static String DATEFORMAT= "dd-MM-uuuu";
 	final public static String TIMEFORMAT= "H:mm";
@@ -29,13 +37,15 @@ public class PanelEmployeeAdd extends JPanel {
 	private JFormattedTextField formattedTextBirthdate;
 	private JFormattedTextField formattedTextDepartureTime;
 	private JFormattedTextField formattedTextArivalTime;
+	private JLabel lblInfo;
+	private JCheckBox chckManager;
 
 	public PanelEmployeeAdd(){
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 
 		JLabel LblInstruction = new JLabel("Personal details :");
@@ -59,7 +69,6 @@ public class PanelEmployeeAdd extends JPanel {
 
 		cbbGender = new JComboBox();
 		cbbGender.setModel(new DefaultComboBoxModel(gender.values()));
-		cbbGender.setMaximumRowCount(3);
 		GridBagConstraints gbc_cbbGender = new GridBagConstraints();
 		gbc_cbbGender.insets = new Insets(0, 0, 5, 0);
 		gbc_cbbGender.fill = GridBagConstraints.HORIZONTAL;
@@ -126,7 +135,6 @@ public class PanelEmployeeAdd extends JPanel {
 		gbc_lblBirthdate.gridy = 5;
 		add(lblBirthdate, gbc_lblBirthdate);
 
-
 		DateTimeFormatter DateFormatter = DateTimeFormatter.ofPattern(DATEFORMAT);
 		formattedTextBirthdate = new JFormattedTextField(DateFormatter);
 		formattedTextBirthdate.setText("DD-MM-YYYY");
@@ -137,14 +145,6 @@ public class PanelEmployeeAdd extends JPanel {
 		gbc_formattedTextBirthdate.gridx = 1;
 		gbc_formattedTextBirthdate.gridy = 5;
 		add(formattedTextBirthdate, gbc_formattedTextBirthdate);
-
-		JButton btnSubmit = new JButton("Submit");
-		btnSubmit.addActionListener(new EmployeeAddAction());
-		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
-		gbc_btnSubmit.anchor = GridBagConstraints.SOUTHEAST;
-		gbc_btnSubmit.gridx = 1;
-		gbc_btnSubmit.gridy = 10;
-		add(btnSubmit, gbc_btnSubmit);
 
 		JLabel lblEmploye = new JLabel("Employment infos :");
 		GridBagConstraints gbc_lblEmploye = new GridBagConstraints();
@@ -163,15 +163,17 @@ public class PanelEmployeeAdd extends JPanel {
 		gbc_lblDepartment.gridy = 7;
 		add(lblDepartment, gbc_lblDepartment);
 
-		cbbDepartment = new JComboBox();
+		
+		Company company=Company.getInstance();
+		Object[] departmentList=company.getDepartmentList().toArray();
+		cbbDepartment = new JComboBox(departmentList);
 		GridBagConstraints gbc_cbbDepartment = new GridBagConstraints();
 		gbc_cbbDepartment.insets = new Insets(0, 0, 5, 0);
 		gbc_cbbDepartment.fill = GridBagConstraints.HORIZONTAL;
 		gbc_cbbDepartment.gridx = 1;
 		gbc_cbbDepartment.gridy = 7;
 		add(cbbDepartment, gbc_cbbDepartment);
-		
-		
+
 		JLabel lblArivaltime = new JLabel("Arival Time :");
 		GridBagConstraints gbc_lblArivaltime = new GridBagConstraints();
 		gbc_lblArivaltime.anchor = GridBagConstraints.EAST;
@@ -179,11 +181,11 @@ public class PanelEmployeeAdd extends JPanel {
 		gbc_lblArivaltime.gridx = 0;
 		gbc_lblArivaltime.gridy = 8;
 		add(lblArivaltime, gbc_lblArivaltime);
-		
+
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIMEFORMAT);
 		formattedTextArivalTime = new JFormattedTextField(timeFormatter);
-		formattedTextArivalTime.setText("HH:MM");
-		
+		formattedTextArivalTime.setText("H:MM");
+
 		GridBagConstraints gbc_formattedTextArivalTime = new GridBagConstraints();
 		gbc_formattedTextArivalTime.insets = new Insets(0, 0, 5, 0);
 		gbc_formattedTextArivalTime.fill = GridBagConstraints.HORIZONTAL;
@@ -198,22 +200,82 @@ public class PanelEmployeeAdd extends JPanel {
 		gbc_lblDepartureTime.gridx = 0;
 		gbc_lblDepartureTime.gridy = 9;
 		add(lblDepartureTime, gbc_lblDepartureTime);
-		
+
 		formattedTextDepartureTime = new JFormattedTextField(timeFormatter);
 		formattedTextDepartureTime.setText("HH:MM");
-		
+
 		GridBagConstraints gbc_formattedTextDepartureTime = new GridBagConstraints();
 		gbc_formattedTextDepartureTime.insets = new Insets(0, 0, 5, 0);
 		gbc_formattedTextDepartureTime.fill = GridBagConstraints.HORIZONTAL;
 		gbc_formattedTextDepartureTime.gridx = 1;
 		gbc_formattedTextDepartureTime.gridy = 9;
 		add(formattedTextDepartureTime, gbc_formattedTextDepartureTime);
+
+		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.addActionListener(new EmployeeAddAction());
 		
+		JLabel lblManager = new JLabel("Manager :");
+		GridBagConstraints gbc_lblManager = new GridBagConstraints();
+		gbc_lblManager.anchor = GridBagConstraints.EAST;
+		gbc_lblManager.insets = new Insets(0, 0, 5, 5);
+		gbc_lblManager.gridx = 0;
+		gbc_lblManager.gridy = 10;
+		add(lblManager, gbc_lblManager);
 		
+		chckManager = new JCheckBox("");
+		GridBagConstraints gbc_chckManager = new GridBagConstraints();
+		gbc_chckManager.insets = new Insets(0, 0, 5, 0);
+		gbc_chckManager.gridx = 1;
+		gbc_chckManager.gridy = 10;
+		add(chckManager, gbc_chckManager);
+
+		lblInfo = new JLabel("");
+		GridBagConstraints gbc_lblError = new GridBagConstraints();
+		gbc_lblError.gridwidth = 2;
+		gbc_lblError.insets = new Insets(0, 0, 5, 0);
+		gbc_lblError.gridx = 0;
+		gbc_lblError.gridy = 11;
+		add(lblInfo, gbc_lblError);
+		
+		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
+		gbc_btnSubmit.anchor = GridBagConstraints.SOUTHEAST;
+		gbc_btnSubmit.gridx = 1;
+		gbc_btnSubmit.gridy = 12;
+		add(btnSubmit, gbc_btnSubmit);
+
+		if (debug){//TODO Delete this debug part
+			txtFirstname.setText("Jonh");
+			txtSurname.setText("SCOT");
+			txtMail.setText("fezfzfe@efzefz.com");
+			formattedTextBirthdate.setText("11-12-2015");
+			formattedTextArivalTime.setText("8:15");
+			formattedTextDepartureTime.setText("19:15");
+			cbbDepartment.addItem(new Department("test"));
+			cbbDepartment.setSelectedIndex(0);
+			cbbGender.setSelectedItem(Person.gender.Male);
+			chckManager.setSelected(false);
+		}
 	}
-	
-	public void setError(String inputError) {
-		System.out.println("error !!!!" + inputError);
+
+	public static String getDateformat() {
+		return DATEFORMAT;
+	}
+
+	public static String getTimeformat() {
+		return TIMEFORMAT;
+	}
+
+	public JCheckBox getChckManager() {
+		return chckManager;
+	}
+
+	public void setInfo(String info, boolean error) {
+		lblInfo.setText(info);
+		if (error){
+			lblInfo.setForeground(Color.RED);
+		}else{
+			lblInfo.setForeground(Color.BLACK);
+		}
 	}
 
 	public JFormattedTextField getFormattedTextBirthdate() {
