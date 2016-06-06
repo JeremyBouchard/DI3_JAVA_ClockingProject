@@ -6,13 +6,18 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
+
+import controler.department.ActionDepartmentAdd;
+import model.Company;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class PanelDepartmentAdd extends JPanel {
-	private JTextField textField;
+	private JTextField textName;
+	private JComboBox comboManager;
 	public PanelDepartmentAdd() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
@@ -36,14 +41,14 @@ public class PanelDepartmentAdd extends JPanel {
 		gbc_lblName.gridy = 1;
 		add(lblName, gbc_lblName);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 0);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 1;
-		add(textField, gbc_textField);
-		textField.setColumns(10);
+		textName = new JTextField();
+		GridBagConstraints gbc_textName = new GridBagConstraints();
+		gbc_textName.insets = new Insets(0, 0, 5, 0);
+		gbc_textName.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textName.gridx = 1;
+		gbc_textName.gridy = 1;
+		add(textName, gbc_textName);
+		textName.setColumns(10);
 		
 		JLabel lblManager = new JLabel("Manager :");
 		GridBagConstraints gbc_lblManager = new GridBagConstraints();
@@ -53,24 +58,29 @@ public class PanelDepartmentAdd extends JPanel {
 		gbc_lblManager.gridy = 2;
 		add(lblManager, gbc_lblManager);
 		
-		JComboBox comboBox = new JComboBox();
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.insets = new Insets(0, 0, 5, 0);
-		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 1;
-		gbc_comboBox.gridy = 2;
-		add(comboBox, gbc_comboBox);
+		
+		Company company=Company.getInstance();
+		Object[] ManagerList=company.getManagerList().toArray();
+		comboManager = new JComboBox(ManagerList);
+		GridBagConstraints gbc_comboManager = new GridBagConstraints();
+		gbc_comboManager.insets = new Insets(0, 0, 5, 0);
+		gbc_comboManager.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboManager.gridx = 1;
+		gbc_comboManager.gridy = 2;
+		add(comboManager, gbc_comboManager);
 		
 		JButton btnSubmit = new JButton("Submit");
-		btnSubmit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Submited");
-			}
-		});
+		btnSubmit.addActionListener(new ActionDepartmentAdd());
 		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
 		gbc_btnSubmit.gridx = 1;
 		gbc_btnSubmit.gridy = 4;
 		add(btnSubmit, gbc_btnSubmit);
+	}
+	public JTextField getTextName() {
+		return textName;
+	}
+	public JComboBox getComboManager() {
+		return comboManager;
 	}
 
 }

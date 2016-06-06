@@ -15,7 +15,7 @@ public class MenuEmployee extends JMenu {
 
 	
 	public MenuEmployee() {
-		setText("Staff management");
+		setText("Employee/Manager");
 		
 		JMenuItem menuItemAdd = new JMenuItem("add");
 		menuItemAdd.addActionListener(new ActionListener() {

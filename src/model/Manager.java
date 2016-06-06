@@ -18,5 +18,9 @@ public class Manager extends Employee {
 		super(firstname, surname, gender, mailAddress, birthdate, department,
 				arrivalTime, departureTime, cardNumber);
 	}
+	
+	public String toString(){
+		return getFirstname()+" "+getSurname()+" (Manager) "+getId();
+	}
 
 }

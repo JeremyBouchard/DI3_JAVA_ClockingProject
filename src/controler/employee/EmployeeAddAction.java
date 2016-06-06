@@ -1,4 +1,4 @@
-package employee;
+package controler.employee;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,7 +68,7 @@ public class EmployeeAddAction implements ActionListener {
 			}		
 		
 		}
-		
+		System.out.println(company.getManagerList().toString());
 		System.out.println(company.getEmployeeList().toString());
 		
 	}

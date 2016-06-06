@@ -1,4 +1,4 @@
-package employee;
+package controler.department;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class ActionEmployeeUpdate implements ActionListener, ListSelectionListener {
+public class ActionDepartmentUpdate implements ActionListener, ListSelectionListener {
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
@@ -15,7 +15,7 @@ public class ActionEmployeeUpdate implements ActionListener, ListSelectionListen
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
 	}

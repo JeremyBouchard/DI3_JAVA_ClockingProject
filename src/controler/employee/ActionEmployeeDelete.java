@@ -1,9 +1,10 @@
-package employee;
+package controler.employee;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JList;
 
 import model.Company;
 import model.Employee;

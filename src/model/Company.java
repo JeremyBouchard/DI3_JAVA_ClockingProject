@@ -38,6 +38,7 @@ public class Company {//Singleton patern
 	}
 	
 	public void addManager(Manager manager){
+		ManagerList.add(manager);
 		ManagerDepartment.getInstance().addManager(manager);
 		Department department= manager.getDepartment();
 		department.setManager(manager);

@@ -1,62 +1,74 @@
 package view.panel.employee;
 
-import javax.swing.JPanel;
 import java.awt.GridBagLayout;
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.Iterator;
-
-import javax.swing.JList;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import javax.swing.JTextField;
 
 import model.Company;
 import model.Employee;
+import model.Manager;
 
-import javax.swing.JComboBox;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+
+import controler.employee.ActionEmployeeUpdate;
+import model.Person.gender;
+import java.awt.event.ActionListener;
+import java.time.format.DateTimeFormatter;
+import java.awt.event.ActionEvent;
 
 public class PanelEmployeeUpdate extends JPanel {
 	private JTextField textFirstname;
 	private JTextField textSurname;
 	private JTextField textMail;
-	private JTextField textBirthdate;
+	private JFormattedTextField formattedTextBirthdate;
 	private JList employeeList;
 	private JComboBox comboGender;
 	private JComboBox comboDepartment;
 	
 	private static DefaultListModel listModel= new DefaultListModel();
-	private JLabel lblInfoList;
+	private JCheckBox chckManager;
+	private JLabel lblInfo;
+	private JTextField textDepartureTime;
+	private JFormattedTextField formattedTextArivalTime;
+	private JFormattedTextField formattedTextDepartureTime;
 	
 	public PanelEmployeeUpdate() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] {0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[] {0, 0, 0, 30, 30, 30, 30, 30, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowHeights = new int[] {0, 0, 0, 30, 30, 30, 0, 30, 0, 0, 30, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		lblInfoList = new JLabel("Select employee");
+		JLabel lblInfoList = new JLabel("Select employee");
 		GridBagConstraints gbc_lblInfoList = new GridBagConstraints();
 		gbc_lblInfoList.insets = new Insets(0, 0, 5, 5);
 		gbc_lblInfoList.gridx = 0;
 		gbc_lblInfoList.gridy = 0;
 		add(lblInfoList, gbc_lblInfoList);
 		
-		JLabel lblInfoUpdate = new JLabel("Update infos");
-		GridBagConstraints gbc_lblInfoUpdate = new GridBagConstraints();
-		gbc_lblInfoUpdate.gridwidth = 2;
-		gbc_lblInfoUpdate.insets = new Insets(0, 0, 5, 5);
-		gbc_lblInfoUpdate.gridx = 1;
-		gbc_lblInfoUpdate.gridy = 0;
-		add(lblInfoUpdate, gbc_lblInfoUpdate);
+		JLabel lblInfoPersonal = new JLabel("Personal details :");
+		GridBagConstraints gbc_lblInfoPersonal = new GridBagConstraints();
+		gbc_lblInfoPersonal.anchor = GridBagConstraints.WEST;
+		gbc_lblInfoPersonal.gridwidth = 2;
+		gbc_lblInfoPersonal.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInfoPersonal.gridx = 1;
+		gbc_lblInfoPersonal.gridy = 0;
+		add(lblInfoPersonal, gbc_lblInfoPersonal);
 		
 		employeeList = new JList(listModel);
+		employeeList.addListSelectionListener(new ActionEmployeeUpdate());
+		employeeList.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		GridBagConstraints gbc_employeeList = new GridBagConstraints();
-		gbc_employeeList.gridheight = 6;
+		gbc_employeeList.gridheight = 10;
 		gbc_employeeList.insets = new Insets(0, 0, 5, 5);
 		gbc_employeeList.fill = GridBagConstraints.BOTH;
 		gbc_employeeList.gridx = 0;
@@ -72,6 +84,7 @@ public class PanelEmployeeUpdate extends JPanel {
 		add(lblGender, gbc_lblGender);
 		
 		comboGender = new JComboBox();
+		comboGender.setModel(new DefaultComboBoxModel(gender.values()));
 		comboGender.setMaximumRowCount(3);
 		GridBagConstraints gbc_comboGender = new GridBagConstraints();
 		gbc_comboGender.insets = new Insets(0, 0, 5, 0);
@@ -139,45 +152,151 @@ public class PanelEmployeeUpdate extends JPanel {
 		gbc_lblDepartment.gridy = 5;
 		add(lblDepartment, gbc_lblDepartment);
 		
-		textBirthdate = new JTextField();
-		textBirthdate.setName("");
-		textBirthdate.setColumns(10);
+		DateTimeFormatter DateFormatter = DateTimeFormatter.ofPattern(PanelEmployeeAdd.DATEFORMAT);
+		formattedTextBirthdate = new JFormattedTextField(DateFormatter);
+		formattedTextBirthdate.setText("");
+
+		formattedTextBirthdate.setName("");
+		formattedTextBirthdate.setColumns(10);
 		GridBagConstraints gbc_textBirthdate = new GridBagConstraints();
 		gbc_textBirthdate.insets = new Insets(0, 0, 5, 0);
 		gbc_textBirthdate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textBirthdate.gridx = 2;
 		gbc_textBirthdate.gridy = 5;
-		add(textBirthdate, gbc_textBirthdate);
+		add(formattedTextBirthdate, gbc_textBirthdate);
+		
+		JLabel lblInfoEmployment = new JLabel("Employment infos :");
+		GridBagConstraints gbc_lblInfoEmployment = new GridBagConstraints();
+		gbc_lblInfoEmployment.anchor = GridBagConstraints.WEST;
+		gbc_lblInfoEmployment.gridwidth = 2;
+		gbc_lblInfoEmployment.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInfoEmployment.gridx = 1;
+		gbc_lblInfoEmployment.gridy = 6;
+		add(lblInfoEmployment, gbc_lblInfoEmployment);
 		
 		JLabel label_5 = new JLabel("Department");
 		GridBagConstraints gbc_label_5 = new GridBagConstraints();
 		gbc_label_5.anchor = GridBagConstraints.EAST;
 		gbc_label_5.insets = new Insets(0, 0, 5, 5);
 		gbc_label_5.gridx = 1;
-		gbc_label_5.gridy = 6;
+		gbc_label_5.gridy = 7;
 		add(label_5, gbc_label_5);
 		
-		comboDepartment = new JComboBox();
+		Company company=Company.getInstance();
+		Object[] departmentList=company.getDepartmentList().toArray();
+		comboDepartment = new JComboBox(departmentList);
+		
 		GridBagConstraints gbc_comboDepartment = new GridBagConstraints();
 		gbc_comboDepartment.insets = new Insets(0, 0, 5, 0);
 		gbc_comboDepartment.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboDepartment.gridx = 2;
-		gbc_comboDepartment.gridy = 6;
+		gbc_comboDepartment.gridy = 7;
 		add(comboDepartment, gbc_comboDepartment);
 		
+		JLabel lblArivalTime = new JLabel("Arival Time :");
+		GridBagConstraints gbc_lblArivalTime = new GridBagConstraints();
+		gbc_lblArivalTime.anchor = GridBagConstraints.EAST;
+		gbc_lblArivalTime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblArivalTime.gridx = 1;
+		gbc_lblArivalTime.gridy = 8;
+		add(lblArivalTime, gbc_lblArivalTime);
+		
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(PanelEmployeeAdd.TIMEFORMAT);
+		formattedTextArivalTime = new JFormattedTextField(timeFormatter);
+		formattedTextArivalTime.setText("");
+
+		GridBagConstraints gbc_formattedTextArivalTime = new GridBagConstraints();
+		gbc_formattedTextArivalTime.insets = new Insets(0, 0, 5, 0);
+		gbc_formattedTextArivalTime.fill = GridBagConstraints.HORIZONTAL;
+		gbc_formattedTextArivalTime.gridx = 2;
+		gbc_formattedTextArivalTime.gridy = 8;
+		add(formattedTextArivalTime, gbc_formattedTextArivalTime);
+
+		
+		JLabel lblDepartureTime = new JLabel("Departure Time");
+		GridBagConstraints gbc_lblDepartureTime = new GridBagConstraints();
+		gbc_lblDepartureTime.anchor = GridBagConstraints.EAST;
+		gbc_lblDepartureTime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDepartureTime.gridx = 1;
+		gbc_lblDepartureTime.gridy = 9;
+		add(lblDepartureTime, gbc_lblDepartureTime);
+		
+		formattedTextDepartureTime = new JFormattedTextField(timeFormatter);
+		formattedTextDepartureTime.setText("");
+		GridBagConstraints gbc_formattedTextDepartureTime = new GridBagConstraints();
+		gbc_formattedTextDepartureTime.insets = new Insets(0, 0, 5, 0);
+		gbc_formattedTextDepartureTime.fill = GridBagConstraints.HORIZONTAL;
+		gbc_formattedTextDepartureTime.gridx = 2;
+		gbc_formattedTextDepartureTime.gridy = 9;
+		add(formattedTextDepartureTime, gbc_formattedTextDepartureTime);
+
+		
+		JLabel lblManager = new JLabel("Manager :");
+		GridBagConstraints gbc_lblManager = new GridBagConstraints();
+		gbc_lblManager.anchor = GridBagConstraints.EAST;
+		gbc_lblManager.insets = new Insets(0, 0, 5, 5);
+		gbc_lblManager.gridx = 1;
+		gbc_lblManager.gridy = 10;
+		add(lblManager, gbc_lblManager);
+		
+		chckManager = new JCheckBox("");
+		GridBagConstraints gbc_chckManager = new GridBagConstraints();
+		gbc_chckManager.insets = new Insets(0, 0, 5, 0);
+		gbc_chckManager.gridx = 2;
+		gbc_chckManager.gridy = 10;
+		add(chckManager, gbc_chckManager);
+		
 		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.addActionListener(new ActionEmployeeUpdate());
+		
+		lblInfo = new JLabel("");
+		GridBagConstraints gbc_lblInfo = new GridBagConstraints();
+		gbc_lblInfo.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInfo.gridx = 2;
+		gbc_lblInfo.gridy = 11;
+		add(lblInfo, gbc_lblInfo);
 		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
 		gbc_btnSubmit.gridx = 2;
-		gbc_btnSubmit.gridy = 7;
+		gbc_btnSubmit.gridy = 12;
 		add(btnSubmit, gbc_btnSubmit);
 	}
 	
+	public JTextField getTextDepartureTime() {
+		return textDepartureTime;
+	}
+
+	public JFormattedTextField getFormattedTextArivalTime() {
+		return formattedTextArivalTime;
+	}
+
+	public JFormattedTextField getFormattedTextDepartureTime() {
+		return formattedTextDepartureTime;
+	}
+
+	public JCheckBox getChckManager() {
+		return chckManager;
+	}
+
 	public static void updateEmployeeList() {
 		Company company=Company.getInstance();
-		Iterator<Employee> iterator= company.getEmployeeList().iterator();
+		Iterator<Employee> employeeIterator= company.getEmployeeList().iterator();
+		Iterator<Manager> mangerIterator = company.getManagerList().iterator();
 		listModel.clear();
-		while (iterator.hasNext()){
-			listModel.addElement(iterator.next());
+		while (employeeIterator.hasNext()){
+			listModel.addElement(employeeIterator.next());
+		}
+		mangerIterator= company.getManagerList().iterator();
+		while (mangerIterator.hasNext()){
+			listModel.addElement(mangerIterator.next());
+		}
+	}
+	
+	public void setInfo(String info, boolean error) {
+		lblInfo.setText(info);
+		if (error){
+			lblInfo.setForeground(Color.RED);
+		}else{
+			lblInfo.setForeground(Color.BLACK);
 		}
 	}
 	
@@ -193,8 +312,8 @@ public class PanelEmployeeUpdate extends JPanel {
 		return textMail;
 	}
 
-	public JTextField getTextBirthdate() {
-		return textBirthdate;
+	public JTextField getFormattedTextBirthdate() {
+		return formattedTextBirthdate;
 	}
 
 	public JList getEmployeeList() {
@@ -208,13 +327,4 @@ public class PanelEmployeeUpdate extends JPanel {
 	public JComboBox getComboDepartment() {
 		return comboDepartment;
 	}
-
-	public static DefaultListModel getListModel() {
-		return listModel;
-	}
-
-	public JLabel getLblInfoList() {
-		return lblInfoList;
-	}
-
 }

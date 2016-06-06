@@ -15,8 +15,11 @@ import javax.swing.DefaultListModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
+
+import controler.employee.ActionEmployeeDelete;
+
 import java.util.*;
-import employee.ActionEmployeeDelete;
+
 import model.Company;
 import model.Employee;
 

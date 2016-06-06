@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import employee.EmployeeAddAction;
+import controler.employee.EmployeeAddAction;
 import model.Company;
 import model.Department;
 import model.Person;
